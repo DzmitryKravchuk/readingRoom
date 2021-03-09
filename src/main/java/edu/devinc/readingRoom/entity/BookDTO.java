@@ -1,19 +1,6 @@
 package edu.devinc.readingRoom.entity;
 
-import edu.devinc.readingRoom.service.BookService;
-import edu.devinc.readingRoom.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Date;
-
 public class BookDTO {
-
-    @Autowired
-    private BookService bookService;
-
-    @Autowired
-    private OrderService orderService;
-
 
     private Integer bookId;
     private String author;
