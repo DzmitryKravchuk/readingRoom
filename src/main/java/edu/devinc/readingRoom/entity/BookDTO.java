@@ -1,41 +1,29 @@
 package edu.devinc.readingRoom.entity;
 
-import javax.persistence.*;
+import edu.devinc.readingRoom.service.BookService;
+import edu.devinc.readingRoom.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.Date;
-import java.util.List;
 
-@Entity
-@Table(name = "book")
-public class Book {
+public class BookDTO {
 
-    @Id
-    @Column (name = "book_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Autowired
+    private BookService bookService;
+
+    @Autowired
+    private OrderService orderService;
+
+
     private Integer bookId;
-
-    @Column(name = "author")
     private String author;
-
-    @Column(name = "title")
     private String title;
-
-    @Column(name = "publisher")
     private String publisher;
-
-    @Column(name = "year")
     private int year;
-
-    @Column(name = "translator")
     private String translator;
-
-    @Column(name = "description")
     private String description;
-
-    @Column(name = "is_free")
     private boolean isFree;
-
-    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
-    private List<Order> orders;
+    private String userName;
 
     public Integer getBookId() {
         return bookId;
@@ -101,25 +89,13 @@ public class Book {
         isFree = free;
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    @Override
-    public String toString() {
-        return "Book{" +
-                "bookId=" + bookId +
-                ", author='" + author + '\'' +
-                ", title='" + title + '\'' +
-                ", publisher='" + publisher + '\'' +
-                ", year=" + year +
-                ", translator='" + translator + '\'' +
-                ", description='" + description + '\'' +
-                ", isFree=" + isFree +
-                '}';
-    }
+
 }

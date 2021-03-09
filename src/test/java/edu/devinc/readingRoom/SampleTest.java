@@ -1,13 +1,12 @@
 package edu.devinc.readingRoom;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 public class SampleTest {
     public static void main(String[] args) {
-        Calendar calendar = new GregorianCalendar(2021, Calendar.FEBRUARY , 2);
+        Calendar calendar = new GregorianCalendar(2021, Calendar.FEBRUARY, 2);
         Date orderDate = calendar.getTime();
+        List<Date> dateList = new ArrayList<>();
 
         Date currentDate = calendar.getInstance().getTime();
 
@@ -17,11 +16,14 @@ public class SampleTest {
 
         long diff = currentDate.getTime() - orderDate.getTime();
 
-        System.out.println ("Days: " + diff / 1000 / 60 / 60 / 24);
-        System.out.println ("new expiry date: " +expiryDate);
+        dateList.add(currentDate);
+        dateList.add(orderDate);
+        System.out.println(dateList);
+        dateList.sort(Comparator.comparing(Date::getDate));
 
+        System.out.println("Days: " + diff / 1000 / 60 / 60 / 24);
+        System.out.println("new expiry date: " + expiryDate);
 
-
-
+        System.out.println(dateList);
     }
 }

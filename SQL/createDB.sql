@@ -4,25 +4,26 @@ CREATE DATABASE reading_room DEFAULT CHARACTER SET 'utf8';
 
 USE reading_room;
 
-CREATE TABLE `Book` (
-                        `bookId` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `book` (
+                        `book_id` int NOT NULL AUTO_INCREMENT,
                         `author` varchar(255) NOT NULL,
                         `title` varchar(255) NOT NULL,
                         `publisher` varchar(255) NOT NULL,
                         `year` int NOT NULL,
                         `translator` varchar(255),
                         `description` varchar(255) NOT NULL,
-                        `orderId` int,
-                        PRIMARY KEY (`bookId`)
+                        `is_free`     BOOLEAN             NOT NULL,
+                        PRIMARY KEY (`book_id`)
 );
 
-CREATE TABLE `Order` (
-                         `orderId` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `book_order` (
+                         `order_id` int NOT NULL AUTO_INCREMENT,
                          `date` DATE NOT NULL,
-                         `userName` varchar(255) NOT NULL,
-                         PRIMARY KEY (`orderId`)
+                         `user_name` varchar(255) NOT NULL,
+                         `book_id` int NOT NULL,
+                         PRIMARY KEY (`order_id`)
 );
 
-ALTER TABLE `Book` ADD CONSTRAINT `OrderItem_fk0` FOREIGN KEY (`orderId`) REFERENCES `Order`(`orderId`);
+ALTER TABLE `book_order` ADD CONSTRAINT `order_item_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`);
 
 

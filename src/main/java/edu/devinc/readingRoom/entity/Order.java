@@ -6,28 +6,29 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "Order")
+@Table(name = "book_order")
 public class Order {
 
     @Id
-    @Column
+    @Column(name = "order_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderId;
 
-    @Column
+    @Column(name = "date")
     Date date;
 
-    @Column
+    @Column(name = "user_name")
     private String userName;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
-    private List<Book> books;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "book_id")
+    private Book book;
 
-    public int getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(int orderId) {
+    public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
 
@@ -47,12 +48,12 @@ public class Order {
         this.userName = userName;
     }
 
-    public List<Book> getBooks() {
-        return books;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBooks(List<Book> books) {
-        this.books = books;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     @Override
@@ -61,7 +62,7 @@ public class Order {
                 "orderId=" + orderId +
                 ", date=" + date +
                 ", userName='" + userName + '\'' +
-                ", books=" + books +
+                ", book=" + book.getBookId() +
                 '}';
     }
 }
