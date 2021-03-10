@@ -15,13 +15,13 @@ public class MsgController {
 
 
     @Autowired
-    private KafkaTemplate<Long, BookDTO> kafkaTemplate;
+    private KafkaTemplate<Long, String> kafkaTemplate;
 
     @PostMapping
-    public void sendMsg(Long msgId, BookDTO msg) {
+    public void sendMsg(Long msgId, String msg) {
 
 
-        ListenableFuture<SendResult<Long, BookDTO>> future = kafkaTemplate.send("msg", msgId, msg);
+        ListenableFuture<SendResult<Long, String>> future = kafkaTemplate.send("msg", msgId, msg);
         future.addCallback(System.out::println, System.err::println);
         kafkaTemplate.flush();
     }
