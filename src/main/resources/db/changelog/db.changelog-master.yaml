@@ -2,7 +2,7 @@ databaseChangeLog:
   - logicalFilePath: db/changelog/db.changelog-lesson1.yaml
   - changeSet:
       id: 1
-      author: your_liquibase_username
+      author: 123
       changes:
         - createTable:
             tableName: book
@@ -44,9 +44,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: is_free
-                  type: valueBoolean
-                  constraints:
-                    nullable: false
+                  type: boolean
         - createTable:
             tableName: book_order
             columns:
@@ -77,7 +75,7 @@ databaseChangeLog:
                       referencedTableName: book
   - changeSet:
       id: 2
-      author: your_liquibase_username
+      author: 123
       comment: "Create books"
       changes:
         - insert:
@@ -101,9 +99,6 @@ databaseChangeLog:
               - column:
                   name: description
                   value: "Книга служит исчерпывающим справочным пособием по языку Java"
-              - column:
-                  name: is_free
-                  value: true
         - insert:
             tableName: book
             columns:
@@ -125,9 +120,6 @@ databaseChangeLog:
               - column:
                   name: description
                   value: "Пособие для программистов и начинающих изучение Java"
-              - column:
-                  name: is_free
-                  value: true
       rollback:
         - delete:
             tableName: book
