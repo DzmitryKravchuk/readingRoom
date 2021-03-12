@@ -5,6 +5,7 @@ import edu.devinc.readingRoom.entity.BookDTO;
 import edu.devinc.readingRoom.entity.Order;
 import edu.devinc.readingRoom.service.BookService;
 import edu.devinc.readingRoom.service.OrderService;
+import edu.devinc.readingRoom.service.util.DTOConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,16 +17,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 @Controller
-
 public class BookRestController {
 
     @Autowired
     private BookService bookService;
 
+
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private DTOConverter converter;
 
     // вывод информации о книге по ее id
     @RequestMapping(value = "/books/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,23 +42,9 @@ public class BookRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        BookDTO bookDTO = convertToDTO(book);
+        BookDTO bookDTO = converter.convertToDTO(book);
 
         return new ResponseEntity<>(bookDTO, HttpStatus.OK);
-    }
-
-    // добавление новой книги в базу
-    //TO DO Реализовать поддержку Kafka
-    @RequestMapping(value = "/books", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Book> saveBook(@RequestBody Book book) {
-        HttpHeaders headers = new HttpHeaders();
-
-        if (book == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        this.bookService.save(book);
-        return new ResponseEntity<>(book, headers, HttpStatus.CREATED);
     }
 
     // резервирование книги
@@ -83,14 +72,13 @@ public class BookRestController {
 
         // добавление книги в заказ
         java.sql.Date currentDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-        ;
         Order order = new Order();
         order.setBook(book);
         order.setUserName(userName);
         order.setDate(currentDate);
         this.orderService.save(order);
         book = this.bookService.getById(bookDTO.getBookId());
-        BookDTO bDTO = convertToDTO(book);
+        BookDTO bDTO = converter.convertToDTO(book);
 
         return new ResponseEntity<>(bDTO, headers, HttpStatus.CREATED);
     }
@@ -100,7 +88,7 @@ public class BookRestController {
         List<BookDTO> reservedBooks = new ArrayList<>();
         for (Book b : books) {
             if (!b.isFree()) {
-                BookDTO dto = convertToDTO(b);
+                BookDTO dto = converter.convertToDTO(b);
                 reservedBooks.add(dto);
             }
         }
@@ -124,7 +112,7 @@ public class BookRestController {
         List<BookDTO> unReservedBooks = new ArrayList<>();
         for (Book b : books) {
             if (b.isFree()) {
-                BookDTO dto = convertToDTO(b);
+                BookDTO dto = converter.convertToDTO(b);
                 unReservedBooks.add(dto);
             }
         }
@@ -135,7 +123,7 @@ public class BookRestController {
     @RequestMapping(value = "/books", method = RequestMethod.GET)
     public ResponseEntity<List<BookDTO>> getAllBooks() {
         List<Book> books = this.bookService.getAll();
-        List<BookDTO> bookDTOList = books.stream().map(book -> convertToDTO(book)).collect(Collectors.toList());
+        List<BookDTO> bookDTOList = books.stream().map(book -> converter.convertToDTO(book)).collect(Collectors.toList());
 
         if (books.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -162,29 +150,10 @@ public class BookRestController {
         }
 
 
-        Order order = this.bookService.getLastOrder(book);
+        Order order = this.orderService.getLastOrder(book);
         this.orderService.delete(order.getOrderId());
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    private BookDTO convertToDTO(Book book) {
-        BookDTO dto = new BookDTO();
-        dto.setAuthor(book.getAuthor());
-        dto.setBookId(book.getBookId());
-        dto.setDescription(book.getDescription());
-        dto.setPublisher(book.getPublisher());
-        dto.setTitle(book.getTitle());
-        dto.setYear(book.getYear());
-        dto.setTranslator(book.getTranslator());
-        if (!book.isFree()) {
-            dto.setFree(false);
-            dto.setUserName(bookService.getLastOrder(book).getUserName());
-        } else {
-            dto.setFree(true);
-        }
-        return dto;
-    }
-
 
 }

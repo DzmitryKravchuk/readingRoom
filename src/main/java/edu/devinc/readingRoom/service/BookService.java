@@ -13,10 +13,6 @@ public interface BookService {
 
     void save(Book book);
 
-    void delete(Integer id);
-
     List<Book> getAll();
-
-    Order getLastOrder(Book book);
 
 }
