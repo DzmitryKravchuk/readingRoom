@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface OrderService {
 
-
     Order getById(Integer id);
 
     void save(Order order);
@@ -17,5 +16,4 @@ public interface OrderService {
     List<Order> getAll();
 
     Order getLastOrder(Book book);
-
 }

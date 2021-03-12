@@ -17,11 +17,8 @@ public class Consumer {
     public void orderListener(ConsumerRecord<Long, String> record) {
         String newBook = record.value();
 
-        // Парсим json и Конвертим обратно в book
         Book book = parseJsonString(newBook);
-
         bookService.save(book);
-
     }
 
     private Book parseJsonString(String newBook) {
@@ -36,6 +33,4 @@ public class Consumer {
         book.setFree(true);
         return book;
     }
-
-
 }

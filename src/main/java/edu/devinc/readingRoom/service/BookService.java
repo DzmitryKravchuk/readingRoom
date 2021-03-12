@@ -1,7 +1,6 @@
 package edu.devinc.readingRoom.service;
 
 import edu.devinc.readingRoom.entity.Book;
-import edu.devinc.readingRoom.entity.Order;
 
 import java.util.List;
 
@@ -14,5 +13,4 @@ public interface BookService {
     void save(Book book);
 
     List<Book> getAll();
-
 }

@@ -22,11 +22,8 @@ public class BookRestController {
 
     @Autowired
     private BookService bookService;
-
-
     @Autowired
     private OrderService orderService;
-
     @Autowired
     private DTOConverter converter;
 
@@ -128,7 +125,6 @@ public class BookRestController {
         if (books.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         return new ResponseEntity<>(bookDTOList, HttpStatus.OK);
     }
 
@@ -155,5 +151,4 @@ public class BookRestController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }

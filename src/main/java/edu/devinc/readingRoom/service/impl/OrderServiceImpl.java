@@ -15,7 +15,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderRepository repository;
 
-
     @Override
     public Order getById(Integer id) {
         return repository.getOne(id);
@@ -38,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getLastOrder(Book book) {
-        List<Order> orders=book.getOrders();
+        List<Order> orders = book.getOrders();
         if (orders.size() > 0) {
             orders.sort(Comparator.comparing(Order::getDate));
             Order lastOrder = orders.get(orders.size() - 1);

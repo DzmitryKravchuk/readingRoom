@@ -15,7 +15,7 @@ import java.util.List;
 public class Book {
 
     @Id
-    @Column (name = "book_id")
+    @Column(name = "book_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer bookId;
 
@@ -42,5 +42,4 @@ public class Book {
 
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     private List<Order> orders;
-
 }
