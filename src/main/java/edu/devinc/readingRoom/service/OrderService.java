@@ -14,4 +14,6 @@ public interface OrderService {
     ResponseEntity<Order> deleteOrder(Integer bookId);
 
     Order getLastOrder(Book book);
+
+    void setBookReserved (Book book, String userName);
 }

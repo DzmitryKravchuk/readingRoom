@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 
@@ -62,5 +63,15 @@ public class OrderServiceImpl implements OrderService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void setBookReserved(Book book, String userName) {
+        java.sql.Date currentDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+        Order order = new Order();
+        order.setBook(book);
+        order.setUserName(userName);
+        order.setDate(currentDate);
+        save(order);
     }
 }

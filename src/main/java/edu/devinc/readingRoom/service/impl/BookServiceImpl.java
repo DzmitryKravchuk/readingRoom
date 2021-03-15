@@ -2,7 +2,6 @@ package edu.devinc.readingRoom.service.impl;
 
 import edu.devinc.readingRoom.entity.Book;
 import edu.devinc.readingRoom.entity.BookDTO;
-import edu.devinc.readingRoom.entity.Order;
 import edu.devinc.readingRoom.repository.BookRepository;
 import edu.devinc.readingRoom.service.BookService;
 import edu.devinc.readingRoom.service.OrderService;
@@ -31,15 +30,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getById(Integer id) {
-        return repository.getOne(id);
+        Book book = repository.getOne(id);
+        book.setFree(checker.ifBookIsFree(book));
+        repository.save(book);
+        return book;
     }
 
     @Override
     public ResponseEntity<BookDTO> getBookById(Integer id) {
         try {
             Book book = getById(id);
-            book.setFree(checker.ifBookIsFree(book));
-            repository.save(book);
             BookDTO bookDTO = converter.convertToDTO(book);
 
             return new ResponseEntity<>(bookDTO, HttpStatus.OK);
@@ -92,16 +92,8 @@ public class BookServiceImpl implements BookService {
         }
 
         // добавление книги в заказ
-        java.sql.Date currentDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-        Order order = new Order();
-        order.setBook(book);
-        order.setUserName(userName);
-        order.setDate(currentDate);
-        this.orderService.save(order);
-        List<Order> orderList = new ArrayList<>();
-        orderList.add(order);
-        book.setOrders(orderList);
-        book.setFree(false);
+        orderService.setBookReserved(book, userName);
+        book = getById(book.getBookId());
         BookDTO bDTO = converter.convertToDTO(book);
 
         return new ResponseEntity<>(bDTO, headers, HttpStatus.CREATED);
