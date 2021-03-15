@@ -3,8 +3,11 @@ package edu.devinc.readingRoom.service.impl;
 import edu.devinc.readingRoom.entity.Book;
 import edu.devinc.readingRoom.entity.Order;
 import edu.devinc.readingRoom.repository.OrderRepository;
+import edu.devinc.readingRoom.service.BookService;
 import edu.devinc.readingRoom.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -14,11 +17,8 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderRepository repository;
-
-    @Override
-    public Order getById(Integer id) {
-        return repository.getOne(id);
-    }
+    @Autowired
+    BookService bookService;
 
     @Override
     public void save(Order order) {
@@ -31,8 +31,25 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAll() {
-        return repository.findAll();
+    public ResponseEntity<Order> deleteOrder(Integer bookId) {
+        if (bookId == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Book book = this.bookService.getById(bookId);
+        if (book == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // проверка что книга зарезервирована
+        if (book.isFree()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        Order order = getLastOrder(book);
+        delete(order.getOrderId());
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override

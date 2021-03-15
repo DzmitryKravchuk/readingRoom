@@ -13,7 +13,7 @@ import java.util.GregorianCalendar;
 
 
 @Component
-public class OrderExpiryTermChecker {
+public class OrderChecker {
     @Autowired
     OrderService orderService;
 

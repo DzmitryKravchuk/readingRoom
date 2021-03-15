@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="authorName" id="changelog-1.3">
+        <insert tableName="book">
+            <column name="author" value="Блох Дж."/>
+            <column name="title" value="Java. Эффективное программирование"/>
+            <column name="publisher" value="Addison-Wesley"/>
+            <column name="year" valueNumeric="2019"/>
+            <column name="translator" value="Красикова И.В."/>
+            <column name="description" value="Книга поможет максимально эффективно использовать возможности Java"/>
+            <column name="is_free" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

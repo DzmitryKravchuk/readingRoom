@@ -2,18 +2,16 @@ package edu.devinc.readingRoom.service;
 
 import edu.devinc.readingRoom.entity.Book;
 import edu.devinc.readingRoom.entity.Order;
-
-import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 
 public interface OrderService {
-
-    Order getById(Integer id);
 
     void save(Order order);
 
     void delete(Integer id);
 
-    List<Order> getAll();
+    ResponseEntity<Order> deleteOrder(Integer bookId);
 
     Order getLastOrder(Book book);
 }

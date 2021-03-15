@@ -12,7 +12,6 @@ import java.sql.Date;
 @Table(name = "book_order")
 @Getter
 @Setter
-@ToString
 public class Order {
 
     @Id
@@ -30,4 +29,13 @@ public class Order {
     @JoinColumn(name = "book_id")
     private Book book;
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId=" + orderId +
+                ", date=" + date +
+                ", userName='" + userName + '\'' +
+                ", book=" + book.getBookId() +
+                '}';
+    }
 }

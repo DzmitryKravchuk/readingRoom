@@ -20,11 +20,9 @@ public class DTOConverter {
         dto.setTitle(book.getTitle());
         dto.setYear(book.getYear());
         dto.setTranslator(book.getTranslator());
+        dto.setFree(book.isFree());
         if (!book.isFree()) {
-            dto.setFree(false);
-            dto.setUserName(orderService.getLastOrder(book).getUserName());
-        } else {
-            dto.setFree(true);
+            dto.setUserName(book.getOrders().get(0).getUserName());
         }
         return dto;
     }

@@ -12,7 +12,7 @@ CREATE TABLE `book` (
                         `year` int NOT NULL,
                         `translator` varchar(255),
                         `description` varchar(255) NOT NULL,
-                        `is_free`     BOOLEAN             NOT NULL,
+                        `is_free`     BOOLEAN,
                         PRIMARY KEY (`book_id`)
 );
 
@@ -25,5 +25,3 @@ CREATE TABLE `book_order` (
 );
 
 ALTER TABLE `book_order` ADD CONSTRAINT `order_item_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`);
-
-
