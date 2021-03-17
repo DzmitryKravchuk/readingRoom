@@ -17,5 +17,4 @@ public class BookDTO {
     private String translator;
     private String description;
     private boolean isFree;
-    private String userName;
-}
+ }

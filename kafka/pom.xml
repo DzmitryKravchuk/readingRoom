@@ -48,12 +48,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- MySQL -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
         <dependency>
             <groupId>edu.devinc</groupId>
             <artifactId>readingRoom</artifactId>

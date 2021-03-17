@@ -1,7 +1,10 @@
 package edu.devinc.readingRoom.service.impl;
 
 import edu.devinc.readingRoom.entity.Book;
+import edu.devinc.readingRoom.entity.BookDTO;
 import edu.devinc.readingRoom.entity.Order;
+import edu.devinc.readingRoom.entity.OrderDTO;
+import edu.devinc.readingRoom.exception.MyException;
 import edu.devinc.readingRoom.repository.OrderRepository;
 import edu.devinc.readingRoom.service.BookService;
 import edu.devinc.readingRoom.service.OrderService;
@@ -32,25 +35,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ResponseEntity<Order> deleteOrder(Integer bookId) {
-        if (bookId == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
+    public void deleteOrder(Integer bookId) {
         Book book = this.bookService.getById(bookId);
-        if (book == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         // проверка что книга зарезервирована
         if (book.isFree()) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            throw new MyException("Book is free");
         }
 
         Order order = getLastOrder(book);
         delete(order.getOrderId());
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
@@ -63,6 +57,26 @@ public class OrderServiceImpl implements OrderService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void reserveBook(OrderDTO orderDTO) {
+        String userName = orderDTO.getUserName();
+
+        //Проверка свободна ли книга
+        Book book = bookService.getById(orderDTO.getBookId());
+        if (!book.isFree()) {
+            throw new MyException("Book is not free");
+        }
+
+        //Проверка количества книг, зарезервированных за 1 пользователем
+        List<BookDTO> booksOf1User = bookService.getReservedBooks(userName);
+        if (booksOf1User.size() == OrderService.MAX_BOOK_COUNT) {
+            throw new MyException("You've reached your book order limit");
+        }
+
+        // добавление книги в заказ
+        setBookReserved(book, userName);
     }
 
     @Override
